@@ -8,8 +8,10 @@
 	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
+	{{template "navbar" .User}}
+
 	<main class="container">
-		<h1>TodoX</h1>
+		<h1>Twoje zadania</h1>
 
 		<form hx-post="/todos"
 		      hx-target="#todo-list"
@@ -20,10 +22,10 @@
 		</form>
 
 		<ul id="todo-list">
-			{{range .}}
+			{{range .Todos}}
 				{{template "todo-item.html" .}}
 			{{else}}
-				<li id="empty-state" class="empty">Brak zadań. Dodaj coś powyżej.</li>
+				{{template "empty-state.html"}}
 			{{end}}
 		</ul>
 	</main>

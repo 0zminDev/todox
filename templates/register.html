@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Załóż konto — TodoX</title>
+	<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+	<main class="auth-container">
+		<div class="auth-card">
+			<a class="brand" href="/">TodoX</a>
+			<h1>Załóż konto</h1>
+
+			{{if .Error}}<p class="error-message">{{.Error}}</p>{{end}}
+
+			<form method="post" action="/register">
+				<label>
+					Imię
+					<input type="text" name="name" value="{{.Name}}" required autofocus>
+				</label>
+				<label>
+					E-mail
+					<input type="email" name="email" value="{{.Email}}" required>
+				</label>
+				<label>
+					Hasło
+					<input type="password" name="password" required minlength="8">
+				</label>
+				<label>
+					Powtórz hasło
+					<input type="password" name="password2" required minlength="8">
+				</label>
+				<button type="submit" class="btn btn-primary btn-block">Załóż konto</button>
+			</form>
+
+			<p class="auth-switch">Masz już konto? <a href="/login">Zaloguj się</a></p>
+		</div>
+	</main>
+</body>
+</html>
