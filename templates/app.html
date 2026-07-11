@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +11,14 @@
 	{{template "navbar" .User}}
 
 	<main class="container">
-		<h1>Twoje zadania</h1>
+		<h1>Your todos</h1>
 
 		<form hx-post="/todos"
 		      hx-target="#todo-list"
 		      hx-swap="afterbegin"
 		      hx-on::after-request="if(event.detail.successful) this.reset()">
-			<input type="text" name="text" placeholder="Co trzeba zrobić?" autocomplete="off" required>
-			<button type="submit">Dodaj</button>
+			<input type="text" name="text" placeholder="What needs to be done?" autocomplete="off" required>
+			<button type="submit">Add</button>
 		</form>
 
 		<ul id="todo-list">

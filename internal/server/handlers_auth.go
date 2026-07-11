@@ -32,17 +32,17 @@ func handleRegisterSubmit(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{"Email": email, "Name": name}
 
 	if email == "" || name == "" || password == "" {
-		data["Error"] = "Wypełnij wszystkie pola."
+		data["Error"] = "Please fill in all fields."
 		render(w, "register.html", data)
 		return
 	}
 	if password != password2 {
-		data["Error"] = "Hasła nie są takie same."
+		data["Error"] = "Passwords don't match."
 		render(w, "register.html", data)
 		return
 	}
 	if len(password) < 8 {
-		data["Error"] = "Hasło musi mieć co najmniej 8 znaków."
+		data["Error"] = "Password must be at least 8 characters long."
 		render(w, "register.html", data)
 		return
 	}
@@ -56,7 +56,7 @@ func handleRegisterSubmit(w http.ResponseWriter, r *http.Request) {
 	res, err := db.Exec(`INSERT INTO users (email, name, password_hash, created_at) VALUES (?, ?, ?, ?)`,
 		email, name, string(hash), time.Now().Unix())
 	if err != nil {
-		data["Error"] = "Ten adres e-mail jest już zarejestrowany."
+		data["Error"] = "This email is already registered."
 		render(w, "register.html", data)
 		return
 	}
@@ -88,7 +88,7 @@ func handleLoginSubmit(w http.ResponseWriter, r *http.Request) {
 	if err != nil || bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {
 		render(w, "login.html", map[string]any{
 			"Email": email,
-			"Error": "Nieprawidłowy e-mail lub hasło.",
+			"Error": "Invalid email or password.",
 		})
 		return
 	}
