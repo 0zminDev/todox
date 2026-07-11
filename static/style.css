@@ -110,28 +110,9 @@ a {
 
 /* ---------- app (todo list) ---------- */
 
-.container {
-	width: 100%;
-	max-width: 480px;
-	margin: 0 auto;
-	padding: 3rem 1rem;
-}
-
 h1 {
 	text-align: center;
 	margin-bottom: 1.5rem;
-}
-
-.container form {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	margin-bottom: 1.5rem;
-}
-
-.add-form-main {
-	display: flex;
-	gap: 0.5rem;
 }
 
 input[type="text"],
@@ -152,35 +133,6 @@ textarea {
 
 textarea {
 	resize: vertical;
-}
-
-.container form > .add-form-main > button {
-	padding: 0.75rem 1.25rem;
-	background: var(--accent);
-	color: white;
-	font-weight: 600;
-	border: none;
-	border-radius: 10px;
-	cursor: pointer;
-	white-space: nowrap;
-}
-
-.add-form-advanced {
-	font-size: 0.9rem;
-}
-
-.add-form-advanced summary {
-	cursor: pointer;
-	color: var(--muted);
-	padding: 0.25rem 0;
-}
-
-.add-form-advanced[open] summary {
-	margin-bottom: 0.5rem;
-}
-
-.add-form-advanced textarea {
-	margin-bottom: 0.5rem;
 }
 
 ul {
@@ -211,6 +163,20 @@ ul {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.5rem;
+}
+
+.card-drag-handle,
+.list-drag-handle {
+	flex-shrink: 0;
+	color: var(--muted);
+	cursor: grab;
+	line-height: 1;
+	user-select: none;
+}
+
+.card-drag-handle:active,
+.list-drag-handle:active {
+	cursor: grabbing;
 }
 
 .todo-item label {
@@ -287,6 +253,16 @@ ul {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.4rem;
+}
+
+.move-select {
+	align-self: flex-start;
+	padding: 0.3rem 0.5rem;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--card);
+	color: var(--muted);
+	font-size: 0.8rem;
 }
 
 .badge {
@@ -585,4 +561,89 @@ ul {
 
 .danger-text {
 	color: var(--danger);
+}
+
+/* ---------- lists board ---------- */
+
+.board-page {
+	padding: 1.5rem;
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+.board {
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+	overflow-x: auto;
+	padding-bottom: 1rem;
+}
+
+.list-column {
+	flex: 0 0 280px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 0.75rem;
+	max-height: calc(100vh - 8rem);
+}
+
+.list-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.list-name {
+	flex: 1;
+	min-width: 0;
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 700;
+	overflow-wrap: anywhere;
+}
+
+.list-actions {
+	display: flex;
+	gap: 0.25rem;
+	flex-shrink: 0;
+}
+
+.list-items {
+	flex: 1;
+	overflow-y: auto;
+	min-height: 2rem;
+}
+
+.add-card-form,
+.add-list-form,
+.list-rename-form {
+	flex-shrink: 0;
+}
+
+.add-list-form {
+	flex: 0 0 280px;
+}
+
+.add-card-form input,
+.add-list-form input {
+	background: transparent;
+	border: 1px dashed var(--border);
+}
+
+#board-empty-state {
+	color: var(--muted);
+	padding: 1rem 0;
+}
+
+/* SortableJS drag-state classes */
+.sortable-ghost {
+	opacity: 0.4;
+}
+
+.sortable-drag {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

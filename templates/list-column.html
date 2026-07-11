@@ -1,0 +1,64 @@
+{{define "list-column"}}
+<div id="list-{{.ID}}" class="list-column" data-list-id="{{.ID}}">
+	<div class="list-header">
+		<span class="list-drag-handle" aria-hidden="true">⠿⠿</span>
+		<h2 class="list-name">{{.Name}}</h2>
+		<div class="list-actions">
+			<button class="icon-btn"
+			        hx-get="/lists/{{.ID}}/edit"
+			        hx-target="#list-{{.ID}}"
+			        hx-swap="outerHTML"
+			        aria-label="Rename list">
+				✎
+			</button>
+			<button class="icon-btn delete-btn"
+			        hx-delete="/lists/{{.ID}}"
+			        hx-target="#list-{{.ID}}"
+			        hx-swap="outerHTML"
+			        hx-confirm="Delete this list and its {{len .Todos}} task(s)?"
+			        aria-label="Delete list">
+				&times;
+			</button>
+		</div>
+	</div>
+
+	<ul id="list-{{.ID}}-items" class="list-items" data-list-id="{{.ID}}">
+		{{range .Todos}}
+			{{template "todo-item.html" .}}
+		{{else}}
+			{{template "todo-empty-state.html" .ID}}
+		{{end}}
+	</ul>
+
+	<form class="add-card-form"
+	      hx-post="/todos"
+	      hx-target="#list-{{.ID}}-items"
+	      hx-swap="beforeend"
+	      hx-on::after-request="if(event.detail.successful) this.reset()">
+		<input type="hidden" name="list_id" value="{{.ID}}">
+		<input type="text" name="text" placeholder="+ Add a card" autocomplete="off" required>
+	</form>
+</div>
+{{end}}
+
+{{define "list-column-edit.html"}}
+<div id="list-{{.ID}}" class="list-column">
+	<form hx-put="/lists/{{.ID}}" hx-target="#list-{{.ID}}" hx-swap="outerHTML" class="list-rename-form">
+		<input type="text" name="name" value="{{.Name}}" required autofocus>
+		<div class="edit-form-actions">
+			<button type="submit" class="btn btn-primary btn-sm">Save</button>
+			<button type="button"
+			        class="btn btn-ghost btn-sm"
+			        hx-get="/lists/{{.ID}}"
+			        hx-target="#list-{{.ID}}"
+			        hx-swap="outerHTML">
+				Cancel
+			</button>
+		</div>
+	</form>
+</div>
+{{end}}
+
+{{define "list-column.html"}}{{template "list-column" .}}{{end}}
+{{define "list-column-new.html"}}<div id="board-empty-state" hx-swap-oob="delete"></div>{{template "list-column" .}}{{end}}
+{{define "board-empty-state.html"}}<div id="board-empty-state" class="empty">No lists yet. Add one above.</div>{{end}}

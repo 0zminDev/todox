@@ -1,6 +1,7 @@
 {{define "todo-li"}}
-<li id="todo-{{.ID}}" class="todo-item {{if .Done}}done{{end}} {{if .Overdue}}overdue{{end}}">
+<li id="todo-{{.ID}}" data-todo-id="{{.ID}}" class="todo-item {{if .Done}}done{{end}} {{if .Overdue}}overdue{{end}}">
 	<div class="todo-row">
+		<span class="card-drag-handle" aria-hidden="true">⠿</span>
 		<label>
 			<input type="checkbox"
 			       {{if .Done}}checked{{end}}
@@ -28,7 +29,6 @@
 		</div>
 	</div>
 
-	{{if or .Description .Tag .DueDate}}
 	<div class="todo-details">
 		{{if .Description}}<p class="todo-description">{{.Description}}</p>{{end}}
 		{{if or .Tag .DueDate}}
@@ -37,8 +37,8 @@
 			{{if .DueDate}}<span class="badge due-badge {{if .Overdue}}overdue-badge{{end}}">Due {{.DueDate}}</span>{{end}}
 		</div>
 		{{end}}
+		<select class="move-select" data-todo-id="{{.ID}}" aria-label="Move to list"></select>
 	</div>
-	{{end}}
 </li>
 {{end}}
 
@@ -66,5 +66,5 @@
 {{end}}
 
 {{define "todo-item.html"}}{{template "todo-li" .}}{{end}}
-{{define "todo-item-new.html"}}<li id="empty-state" hx-swap-oob="delete"></li>{{template "todo-li" .}}{{end}}
-{{define "empty-state.html"}}<li id="empty-state" class="empty">No tasks yet. Add one above.</li>{{end}}
+{{define "todo-item-new.html"}}<li id="empty-state-{{.ListID}}" hx-swap-oob="delete"></li>{{template "todo-li" .}}{{end}}
+{{define "todo-empty-state.html"}}<li id="empty-state-{{.}}" class="empty">No tasks yet. Add one above.</li>{{end}}

@@ -10,35 +10,25 @@
 <body>
 	{{template "navbar" .User}}
 
-	<main class="container">
-		<h1>Your todos</h1>
-
-		<form id="add-form"
-		      hx-post="/todos"
-		      hx-target="#todo-list"
-		      hx-swap="afterbegin"
-		      hx-on::after-request="if(event.detail.successful) { this.reset(); this.querySelector('details').open = false }">
-			<div class="add-form-main">
-				<input type="text" name="text" placeholder="What needs to be done?" autocomplete="off" required>
-				<button type="submit">Add</button>
-			</div>
-			<details class="add-form-advanced">
-				<summary>More options</summary>
-				<textarea name="description" placeholder="Description (optional)" rows="2"></textarea>
-				<div class="edit-form-row">
-					<input type="date" name="due_date">
-					<input type="text" name="tag" placeholder="Tag (optional)">
-				</div>
-			</details>
-		</form>
-
-		<ul id="todo-list">
-			{{range .Todos}}
-				{{template "todo-item.html" .}}
+	<main class="board-page">
+		<div id="lists-board" class="board">
+			{{range .Lists}}
+				{{template "list-column.html" .}}
 			{{else}}
-				{{template "empty-state.html"}}
+				{{template "board-empty-state.html"}}
 			{{end}}
-		</ul>
+			<form id="add-list-form"
+			      class="add-list-form"
+			      hx-post="/lists"
+			      hx-target="#add-list-form"
+			      hx-swap="beforebegin"
+			      hx-on::after-request="if(event.detail.successful) this.reset()">
+				<input type="text" name="name" placeholder="+ Add a list" autocomplete="off" required>
+			</form>
+		</div>
 	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+	<script src="/static/board.js"></script>
 </body>
 </html>
