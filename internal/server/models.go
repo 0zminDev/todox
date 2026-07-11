@@ -11,7 +11,11 @@ type User struct {
 }
 
 type Todo struct {
-	ID   int64
-	Text string
-	Done bool
+	ID          int64
+	Text        string
+	Description string
+	DueDate     string // YYYY-MM-DD, empty if unset
+	Tag         string
+	Done        bool
+	Overdue     bool // computed: DueDate is in the past and Done is false
 }

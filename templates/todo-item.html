@@ -1,22 +1,70 @@
 {{define "todo-li"}}
-<li id="todo-{{.ID}}" class="todo-item {{if .Done}}done{{end}}">
-	<label>
-		<input type="checkbox"
-		       {{if .Done}}checked{{end}}
-		       hx-post="/todos/{{.ID}}/toggle"
-		       hx-target="#todo-{{.ID}}"
-		       hx-swap="outerHTML">
-		<span>{{.Text}}</span>
-	</label>
-	<button class="delete-btn"
-	        hx-delete="/todos/{{.ID}}"
-	        hx-target="#todo-{{.ID}}"
-	        hx-swap="outerHTML"
-	        hx-confirm="Delete this task?">
-		&times;
-	</button>
+<li id="todo-{{.ID}}" class="todo-item {{if .Done}}done{{end}} {{if .Overdue}}overdue{{end}}">
+	<div class="todo-row">
+		<label>
+			<input type="checkbox"
+			       {{if .Done}}checked{{end}}
+			       hx-post="/todos/{{.ID}}/toggle"
+			       hx-target="#todo-{{.ID}}"
+			       hx-swap="outerHTML">
+			<span class="todo-text">{{.Text}}</span>
+		</label>
+		<div class="todo-actions">
+			<button class="icon-btn"
+			        hx-get="/todos/{{.ID}}/edit"
+			        hx-target="#todo-{{.ID}}"
+			        hx-swap="outerHTML"
+			        aria-label="Edit">
+				✎
+			</button>
+			<button class="icon-btn delete-btn"
+			        hx-delete="/todos/{{.ID}}"
+			        hx-target="#todo-{{.ID}}"
+			        hx-swap="outerHTML"
+			        hx-confirm="Delete this task?"
+			        aria-label="Delete">
+				&times;
+			</button>
+		</div>
+	</div>
+
+	{{if or .Description .Tag .DueDate}}
+	<div class="todo-details">
+		{{if .Description}}<p class="todo-description">{{.Description}}</p>{{end}}
+		{{if or .Tag .DueDate}}
+		<div class="todo-meta">
+			{{if .Tag}}<span class="badge tag-badge">{{.Tag}}</span>{{end}}
+			{{if .DueDate}}<span class="badge due-badge {{if .Overdue}}overdue-badge{{end}}">Due {{.DueDate}}</span>{{end}}
+		</div>
+		{{end}}
+	</div>
+	{{end}}
 </li>
 {{end}}
+
+{{define "todo-item-edit.html"}}
+<li id="todo-{{.ID}}" class="todo-item todo-item-editing">
+	<form hx-put="/todos/{{.ID}}" hx-target="#todo-{{.ID}}" hx-swap="outerHTML" class="edit-form">
+		<input type="text" name="text" value="{{.Text}}" placeholder="Task title" required autofocus>
+		<textarea name="description" placeholder="Description (optional)" rows="2">{{.Description}}</textarea>
+		<div class="edit-form-row">
+			<input type="date" name="due_date" value="{{.DueDate}}">
+			<input type="text" name="tag" value="{{.Tag}}" placeholder="Tag (optional)">
+		</div>
+		<div class="edit-form-actions">
+			<button type="submit" class="btn btn-primary btn-sm">Save</button>
+			<button type="button"
+			        class="btn btn-ghost btn-sm"
+			        hx-get="/todos/{{.ID}}"
+			        hx-target="#todo-{{.ID}}"
+			        hx-swap="outerHTML">
+				Cancel
+			</button>
+		</div>
+	</form>
+</li>
+{{end}}
+
 {{define "todo-item.html"}}{{template "todo-li" .}}{{end}}
 {{define "todo-item-new.html"}}<li id="empty-state" hx-swap-oob="delete"></li>{{template "todo-li" .}}{{end}}
 {{define "empty-state.html"}}<li id="empty-state" class="empty">No tasks yet. Add one above.</li>{{end}}
