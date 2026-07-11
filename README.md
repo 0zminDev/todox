@@ -51,9 +51,9 @@ docker run -p 8080:8080 -v todox_data:/data todox
    ```
    Dodaj wynik jako `FLY_API_TOKEN` w **Settings → Secrets and variables → Actions** w repo na GitHubie.
 
-Od tej pory każdy push do `main` (po przejściu buildu w CI) automatycznie deployuje aplikację na Fly.io — patrz `.github/workflows/deploy.yml`.
+Od tej pory każdy push do `master` (po przejściu buildu w CI) automatycznie deployuje aplikację na Fly.io — patrz `.github/workflows/deploy.yml`.
 
 ## CI
 
-- `.github/workflows/ci.yml` — build + vet + test na PR-ach i branchach innych niż `main`
-- `.github/workflows/deploy.yml` — build + deploy na Fly.io przy pushu do `main`
+- `.github/workflows/ci.yml` — build + vet + test na PR-ach i branchach innych niż `master`
+- `.github/workflows/deploy.yml` — build + deploy na Fly.io przy pushu do `master`
