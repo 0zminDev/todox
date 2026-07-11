@@ -1,0 +1,12 @@
+{{define "navbar"}}
+<nav class="navbar">
+	<a class="brand" href="/app">TodoX</a>
+	<div class="nav-actions">
+		<span class="muted">{{.Name}}</span>
+		<a class="btn btn-ghost btn-sm" href="/profile">Profil</a>
+		<form method="post" action="/logout" class="inline-form">
+			<button type="submit" class="btn btn-ghost btn-sm">Wyloguj</button>
+		</form>
+	</div>
+</nav>
+{{end}}

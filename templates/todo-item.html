@@ -1,0 +1,22 @@
+{{define "todo-li"}}
+<li id="todo-{{.ID}}" class="todo-item {{if .Done}}done{{end}}">
+	<label>
+		<input type="checkbox"
+		       {{if .Done}}checked{{end}}
+		       hx-post="/todos/{{.ID}}/toggle"
+		       hx-target="#todo-{{.ID}}"
+		       hx-swap="outerHTML">
+		<span>{{.Text}}</span>
+	</label>
+	<button class="delete-btn"
+	        hx-delete="/todos/{{.ID}}"
+	        hx-target="#todo-{{.ID}}"
+	        hx-swap="outerHTML"
+	        hx-confirm="Usunąć to zadanie?">
+		&times;
+	</button>
+</li>
+{{end}}
+{{define "todo-item.html"}}{{template "todo-li" .}}{{end}}
+{{define "todo-item-new.html"}}<li id="empty-state" hx-swap-oob="delete"></li>{{template "todo-li" .}}{{end}}
+{{define "empty-state.html"}}<li id="empty-state" class="empty">Brak zadań. Dodaj coś powyżej.</li>{{end}}
