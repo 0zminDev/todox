@@ -36,6 +36,9 @@ func createSession(w http.ResponseWriter, r *http.Request, userID int64) error {
 		token, userID, expiresAt.Unix()); err != nil {
 		return err
 	}
+	if _, err := db.Exec(`UPDATE users SET last_ip = ? WHERE id = ?`, clientIP(r), userID); err != nil {
+		return err
+	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     sessionCookieName,
 		Value:    token,
@@ -56,14 +59,18 @@ func userFromRequest(r *http.Request) (*User, error) {
 	var u User
 	var expiresAt int64
 	row := db.QueryRow(`
-		SELECT u.id, u.email, u.name, s.expires_at
+		SELECT u.id, u.email, u.name, u.is_admin, u.banned, s.expires_at
 		FROM sessions s JOIN users u ON u.id = s.user_id
 		WHERE s.token = ?`, cookie.Value)
-	if err := row.Scan(&u.ID, &u.Email, &u.Name, &expiresAt); err != nil {
+	if err := row.Scan(&u.ID, &u.Email, &u.Name, &u.IsAdmin, &u.Banned, &expiresAt); err != nil {
 		return nil, err
 	}
 	if time.Now().Unix() > expiresAt {
 		return nil, errors.New("session expired")
+	}
+	if u.Banned {
+		db.Exec(`DELETE FROM sessions WHERE token = ?`, cookie.Value)
+		return nil, errors.New("account banned")
 	}
 	return &u, nil
 }
@@ -83,4 +90,14 @@ func requireAuth(next http.HandlerFunc) http.HandlerFunc {
 		ctx := context.WithValue(r.Context(), userCtxKey, u)
 		next(w, r.WithContext(ctx))
 	}
+}
+
+func requireAdmin(next http.HandlerFunc) http.HandlerFunc {
+	return requireAuth(func(w http.ResponseWriter, r *http.Request) {
+		if !currentUser(r).IsAdmin {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
+		next(w, r)
+	})
 }

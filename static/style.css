@@ -493,3 +493,96 @@ ul {
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ---------- admin dashboard ---------- */
+
+.admin-container {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem 4rem;
+}
+
+.admin-container h1 {
+	text-align: left;
+	margin-bottom: 1.5rem;
+}
+
+.stat-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	gap: 0.75rem;
+	margin-bottom: 2.5rem;
+}
+
+.stat-tile {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 1rem;
+}
+
+.stat-value {
+	font-size: 1.6rem;
+	font-weight: 700;
+}
+
+.stat-label {
+	font-size: 0.8rem;
+	color: var(--muted);
+}
+
+.admin-section {
+	margin-bottom: 2.5rem;
+}
+
+.admin-section h2 {
+	font-size: 1.15rem;
+	margin: 0 0 1rem;
+}
+
+.table-scroll {
+	overflow-x: auto;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+}
+
+.admin-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.9rem;
+	background: var(--card);
+}
+
+.admin-table th,
+.admin-table td {
+	text-align: left;
+	padding: 0.6rem 0.9rem;
+	white-space: nowrap;
+	border-bottom: 1px solid var(--border);
+}
+
+.admin-table tr:last-child td {
+	border-bottom: none;
+}
+
+.admin-badge {
+	background: rgba(0, 122, 255, 0.15);
+	color: var(--accent);
+}
+
+.banned-badge {
+	background: rgba(255, 59, 48, 0.15);
+	color: var(--danger);
+}
+
+.active-badge {
+	background: rgba(52, 199, 89, 0.15);
+	color: var(--success);
+}
+
+.danger-text {
+	color: var(--danger);
+}

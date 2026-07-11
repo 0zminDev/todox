@@ -62,6 +62,13 @@ func handleRegisterSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, _ := res.LastInsertId()
 
+	if isAdminEmail(email) {
+		if _, err := db.Exec(`UPDATE users SET is_admin = 1 WHERE id = ?`, userID); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	if err := createSession(w, r, userID); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -83,12 +90,20 @@ func handleLoginSubmit(w http.ResponseWriter, r *http.Request) {
 
 	var userID int64
 	var hash string
-	row := db.QueryRow(`SELECT id, password_hash FROM users WHERE email = ?`, email)
-	err := row.Scan(&userID, &hash)
+	var banned bool
+	row := db.QueryRow(`SELECT id, password_hash, banned FROM users WHERE email = ?`, email)
+	err := row.Scan(&userID, &hash, &banned)
 	if err != nil || bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {
 		render(w, "login.html", map[string]any{
 			"Email": email,
 			"Error": "Invalid email or password.",
+		})
+		return
+	}
+	if banned {
+		render(w, "login.html", map[string]any{
+			"Email": email,
+			"Error": "This account has been suspended.",
 		})
 		return
 	}
