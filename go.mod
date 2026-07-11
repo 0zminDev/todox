@@ -1,4 +1,4 @@
-module todox
+module github.com/0zminDev/todox
 
 go 1.26.5
 
