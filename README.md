@@ -5,104 +5,104 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Go Version](https://img.shields.io/badge/go-1.26-00ADD8?logo=go&logoColor=white)](go.mod)
 
-Prosta appka Todo: Go + HTMX + SQLite, z rejestracją/logowaniem i osobną listą zadań dla każdego użytkownika.
+A simple Todo app: Go + HTMX + SQLite, with registration/login and a private todo list per user.
 
-## Spis treści
+## Table of contents
 
-- [Funkcje](#funkcje)
-- [Struktura projektu](#struktura-projektu)
-- [Uruchomienie lokalnie](#uruchomienie-lokalnie)
-- [Uruchomienie przez Docker](#uruchomienie-przez-docker)
-- [Deploy na Fly.io](#deploy-na-flyio)
+- [Features](#features)
+- [Project structure](#project-structure)
+- [Running locally](#running-locally)
+- [Running with Docker](#running-with-docker)
+- [Deploying to Fly.io](#deploying-to-flyio)
 - [CI/CD](#cicd)
-- [Współtworzenie](#współtworzenie)
-- [Bezpieczeństwo](#bezpieczeństwo)
-- [Licencja](#licencja)
+- [Contributing](#contributing)
+- [Security](#security)
+- [License](#license)
 
-## Funkcje
+## Features
 
-- Rejestracja, logowanie, wylogowanie — sesje trzymane w SQLite, hasła hashowane bcryptem
-- Osobna, izolowana lista zadań dla każdego użytkownika
-- Dodawanie / odznaczanie / usuwanie zadań bez przeładowania strony (HTMX)
-- Profil użytkownika: zmiana imienia i hasła
-- Landing page dla niezalogowanych
+- Registration, login, logout — sessions stored in SQLite, passwords hashed with bcrypt
+- A separate, isolated todo list per user
+- Add / toggle / delete todos without a page reload (HTMX)
+- User profile: change name and password
+- Landing page for signed-out visitors
 
-## Struktura projektu
+## Project structure
 
 ```
-cmd/todox/          punkt wejścia (func main)
-internal/server/    routing, sesje/auth, handlery HTTP, dostęp do SQLite
-templates/           szablony HTML (html/template + HTMX)
+cmd/todox/          entry point (func main)
+internal/server/    routing, sessions/auth, HTTP handlers, SQLite access
+templates/           HTML templates (html/template + HTMX)
 static/              CSS
-.github/workflows/   CI (build/vet/test) i CD (deploy na Fly.io)
+.github/workflows/   CI (build/vet/test) and CD (deploy to Fly.io)
 ```
 
-## Uruchomienie lokalnie
+## Running locally
 
-Wymaga Go 1.26+.
+Requires Go 1.26+.
 
 ```bash
 go run ./cmd/todox
 ```
 
-Aplikacja wystartuje na `http://localhost:8080`. Baza `todos.db` tworzy się automatycznie w katalogu projektu.
+The app starts on `http://localhost:8080`. The `todos.db` SQLite file is created automatically in the project directory.
 
-Zmienne środowiskowe (opcjonalne):
-- `PORT` — port HTTP (domyślnie `8080`)
-- `DB_PATH` — ścieżka do pliku SQLite (domyślnie `todos.db`)
+Environment variables (optional):
+- `PORT` — HTTP port (default `8080`)
+- `DB_PATH` — path to the SQLite file (default `todos.db`)
 
-## Uruchomienie przez Docker
+## Running with Docker
 
 ```bash
 docker build -t todox .
 docker run -p 8080:8080 -v todox_data:/data todox
 ```
 
-## Deploy na Fly.io
+## Deploying to Fly.io
 
-1. Zainstaluj `flyctl` i zaloguj się:
+1. Install `flyctl` and log in:
    ```bash
    curl -L https://fly.io/install.sh | sh
    fly auth login
    ```
 
-2. Stwórz aplikację (nazwa i region w `fly.toml` muszą być globalnie unikalne — zmień jeśli zajęte):
+2. Create the app (the name and region in `fly.toml` must be globally unique — change them if taken):
    ```bash
    fly launch --no-deploy
    ```
-   (potwierdź istniejący `fly.toml`, nie nadpisuj go)
+   (confirm the existing `fly.toml`, don't overwrite it)
 
-3. Stwórz wolumen na bazę SQLite (region musi się zgadzać z `primary_region` w `fly.toml`):
+3. Create a volume for the SQLite database (region must match `primary_region` in `fly.toml`):
    ```bash
    fly volumes create todox_data --region waw --size 1
    ```
 
-4. Pierwszy deploy ręczny (żeby sprawdzić, że wszystko działa):
+4. First manual deploy (to confirm everything works):
    ```bash
    fly deploy
    ```
 
-5. Automatyczny deploy z GitHub Actions — wygeneruj token i dodaj go jako sekret repo:
+5. Automatic deploys via GitHub Actions — generate a token and add it as a repo secret:
    ```bash
    fly tokens create deploy
    ```
-   Dodaj **cały** wynik (razem z prefiksem `FlyV1 `) jako `FLY_API_TOKEN` w **Settings → Secrets and variables → Actions** w repo na GitHubie.
+   Add the **entire** output (including the `FlyV1 ` prefix) as `FLY_API_TOKEN` in **Settings → Secrets and variables → Actions** on GitHub.
 
-Od tej pory każdy push do `master` (po przejściu buildu w CI) automatycznie deployuje aplikację na Fly.io.
+From then on, every push to `master` (once CI passes) automatically deploys the app to Fly.io.
 
 ## CI/CD
 
-- `.github/workflows/ci.yml` — build + vet + test na PR-ach i branchach innych niż `master`
-- `.github/workflows/deploy.yml` — build + deploy na Fly.io przy pushu do `master`
+- `.github/workflows/ci.yml` — build + vet + test on PRs and branches other than `master`
+- `.github/workflows/deploy.yml` — build + deploy to Fly.io on push to `master`
 
-## Współtworzenie
+## Contributing
 
-Zobacz [CONTRIBUTING.md](CONTRIBUTING.md) — jak skonfigurować środowisko, jakich commitów/PR-ów oczekujemy, jak zgłaszać błędy. Uczestnicy tego projektu zobowiązani są przestrzegać [Kodeksu postępowania](CODE_OF_CONDUCT.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, commit/PR expectations, and how to report issues. Contributors are expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Bezpieczeństwo
+## Security
 
-Podatności zgłaszaj zgodnie z [SECURITY.md](SECURITY.md) — nie jako publiczny issue.
+Report vulnerabilities per [SECURITY.md](SECURITY.md) — not as a public issue.
 
-## Licencja
+## License
 
 [MIT](LICENSE)

@@ -1,35 +1,35 @@
-# Kodeks postępowania
+# Code of Conduct
 
-## Nasze zobowiązanie
+## Our pledge
 
-Dbamy o to, aby udział w tym projekcie był wolny od nękania dla każdego, niezależnie od wieku, rozmiaru ciała, niepełnosprawności, pochodzenia etnicznego, tożsamości i ekspresji płciowej, poziomu doświadczenia, wykształcenia, statusu społeczno-ekonomicznego, narodowości, wyglądu, rasy, religii czy orientacji seksualnej.
+We are committed to making participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-## Nasze standardy
+## Our standards
 
-Zachowania, które budują pozytywną atmosferę:
+Behavior that helps create a positive environment:
 
-- Życzliwość i empatia wobec innych uczestników
-- Szanowanie odmiennych opinii, punktów widzenia i doświadczeń
-- Konstruktywne przyjmowanie i udzielanie krytyki
-- Branie odpowiedzialności za błędy i uczenie się na nich
-- Skupianie się na tym, co jest najlepsze nie tylko dla nas jako jednostek, ale dla całej społeczności
+- Being kind and empathetic toward other participants
+- Respecting differing opinions, viewpoints, and experiences
+- Giving and gracefully accepting constructive criticism
+- Taking responsibility for mistakes and learning from them
+- Focusing on what is best not just for us as individuals, but for the whole community
 
-Zachowania niedopuszczalne:
+Unacceptable behavior includes:
 
-- Używanie języka lub obrazów o charakterze seksualnym oraz niechciana uwaga lub zaloty
-- Trollowanie, obraźliwe/uwłaczające komentarze oraz ataki personalne lub polityczne
-- Nękanie publiczne lub prywatne
-- Publikowanie prywatnych informacji innych osób (np. adresu fizycznego lub e-mail) bez wyraźnej zgody
-- Inne zachowania, które można racjonalnie uznać za niewłaściwe w środowisku zawodowym
+- Sexualized language or imagery, and unwelcome sexual attention or advances
+- Trolling, insulting or derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others' private information (e.g. physical or email address) without explicit permission
+- Other conduct which could reasonably be considered inappropriate in a professional setting
 
-## Zakres
+## Scope
 
-Ten kodeks obowiązuje we wszystkich przestrzeniach projektu (issues, pull requesty, dyskusje) oraz podczas oficjalnej reprezentacji projektu w przestrzeni publicznej.
+This Code of Conduct applies within all project spaces (issues, pull requests, discussions) and when officially representing the project in public.
 
-## Egzekwowanie
+## Enforcement
 
-Przypadki nadużyć można zgłaszać, kontaktując się z zespołem projektu pod adresem **0zminDev@pm.me**. Wszystkie zgłoszenia zostaną rozpatrzone i zbadane, a odpowiedź będzie adekwatna do okoliczności. Zespół projektu jest zobowiązany do zachowania poufności w stosunku do osoby zgłaszającej incydent.
+Instances of abusive behavior may be reported by contacting the project team at **0zminDev@pm.me**. All complaints will be reviewed and investigated, and will result in a response deemed appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
 
-## Atrybucja
+## Attribution
 
-Ten kodeks postępowania jest adaptacją [Contributor Covenant](https://www.contributor-covenant.org), wersja 2.1.
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.

@@ -1,20 +1,20 @@
-## Co zmienia ten PR
+## What does this PR change
 
-Krótki opis zmiany i jej motywacji.
+Short description of the change and its motivation.
 
-## Jak przetestowano
+## How was it tested
 
 - [ ] `go build ./...`
 - [ ] `go vet ./...`
 - [ ] `go test ./...`
-- [ ] Przetestowano ręcznie w przeglądarce (jeśli zmiana dotyczy UI)
+- [ ] Manually tested in the browser (if the change touches the UI)
 
-## Powiązane issues
+## Related issues
 
 Closes #
 
 ## Checklist
 
-- [ ] Commity są atomowe i mają opisowe wiadomości
-- [ ] `gofmt -l .` nie zwraca żadnych plików
-- [ ] Zaktualizowano dokumentację (README/CONTRIBUTING), jeśli dotyczy
+- [ ] Commits are atomic with descriptive messages
+- [ ] `gofmt -l .` returns no files
+- [ ] Documentation (README/CONTRIBUTING) updated if applicable

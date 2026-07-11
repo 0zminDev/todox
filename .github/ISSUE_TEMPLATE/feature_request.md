@@ -1,18 +1,18 @@
 ---
-name: Propozycja funkcji
-about: Zaproponuj pomysł dla tego projektu
+name: Feature request
+about: Suggest an idea for this project
 title: "[FEATURE] "
 labels: enhancement
 ---
 
-**Czy Twoja propozycja wiąże się z jakimś problemem? Opisz go.**
-Np. "Brakuje mi możliwości, żeby..."
+**Is your feature request related to a problem? Please describe.**
+E.g. "I'm missing the ability to..."
 
-**Opisz rozwiązanie, które chciałbyś zobaczyć**
-Jasny opis tego, co ma się wydarzyć.
+**Describe the solution you'd like**
+A clear description of what you want to happen.
 
-**Rozważane alternatywy**
-Inne podejścia, które rozważałeś/aś.
+**Describe alternatives you've considered**
+Other approaches you thought about.
 
-**Dodatkowy kontekst**
-Cokolwiek jeszcze — mockupy, linki, przykłady z innych narzędzi.
+**Additional context**
+Anything else — mockups, links, examples from other tools.

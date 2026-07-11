@@ -1,15 +1,15 @@
-# Współtworzenie TodoX
+# Contributing to TodoX
 
-Dzięki za chęć pomocy! Krótki przewodnik, jak wnieść zmiany.
+Thanks for your interest in contributing! Here's a short guide.
 
-## Zanim zaczniesz
+## Before you start
 
-- Dla większych zmian najpierw otwórz issue i opisz co i dlaczego chcesz zrobić — zaoszczędzi to czas, jeśli okaże się że coś już jest w toku albo nie pasuje do kierunku projektu.
-- Dla drobnych poprawek (literówki, bugfixy) możesz od razu otworzyć pull request.
+- For larger changes, open an issue first describing what and why — this saves time in case something's already in progress or doesn't fit the project's direction.
+- For small fixes (typos, bugfixes) feel free to open a pull request directly.
 
-## Środowisko lokalne
+## Local setup
 
-Wymagania: Go 1.26+.
+Requires Go 1.26+.
 
 ```bash
 git clone https://github.com/0zminDev/todox.git
@@ -17,32 +17,32 @@ cd todox
 go run ./cmd/todox
 ```
 
-Aplikacja wystartuje na `http://localhost:8080`, baza `todos.db` tworzy się automatycznie w katalogu projektu.
+The app starts on `http://localhost:8080`; the `todos.db` file is created automatically in the project directory.
 
-## Struktura projektu
+## Project structure
 
 ```
-cmd/todox/          punkt wejścia (main)
-internal/server/    logika HTTP: routing, sesje, handlery, dostęp do SQLite
-templates/          szablony HTML (Go templates + HTMX)
-static/             CSS
+cmd/todox/          entry point (main)
+internal/server/    HTTP logic: routing, sessions, handlers, SQLite access
+templates/           HTML templates (Go templates + HTMX)
+static/              CSS
 ```
 
-## Przed wysłaniem PR-a
+## Before submitting a PR
 
 ```bash
 go build ./...
 go vet ./...
 go test ./...
-gofmt -l .   # nie powinno nic wypisać
+gofmt -l .   # should print nothing
 ```
 
-## Commity i PR-y
+## Commits and PRs
 
-- Commity powinny być atomowe — jedna zmiana, jeden commit, opisowy message.
-- PR-y kierujemy do `master`.
-- CI (`go build`, `go vet`, `go test`) musi przechodzić przed mergem.
+- Commits should be atomic — one change, one commit, with a descriptive message.
+- PRs target `master`.
+- CI (`go build`, `go vet`, `go test`) must pass before merging.
 
-## Zgłaszanie błędów / propozycji
+## Reporting bugs / proposals
 
-Użyj szablonów w `.github/ISSUE_TEMPLATE/`. Im więcej konkretów (kroki do odtworzenia, oczekiwane vs. rzeczywiste zachowanie), tym szybciej się tym zajmiemy.
+Use the templates in `.github/ISSUE_TEMPLATE/`. The more specific (steps to reproduce, expected vs. actual behavior), the faster it'll get addressed.

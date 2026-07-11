@@ -1,23 +1,23 @@
-# Polityka bezpieczeństwa
+# Security Policy
 
-## Zgłaszanie podatności
+## Reporting a vulnerability
 
-Jeśli znajdziesz lukę bezpieczeństwa w TodoX, **nie zgłaszaj jej jako publiczny issue**. Zamiast tego napisz bezpośrednio na **0zminDev@pm.me** z opisem:
+If you find a security vulnerability in TodoX, **please don't report it as a public issue**. Instead, email **0zminDev@pm.me** with:
 
-- rodzaju podatności i jej potencjalnego wpływu,
-- kroków potrzebnych do jej odtworzenia,
-- wersji/commita, którego dotyczy.
+- the type of vulnerability and its potential impact,
+- steps to reproduce it,
+- the affected version/commit.
 
-Postaram się potwierdzić otrzymanie zgłoszenia w ciągu kilku dni i informować o postępie prac nad poprawką.
+I'll try to acknowledge the report within a few days and keep you posted on progress toward a fix.
 
-## Wspierane wersje
+## Supported versions
 
-Projekt jest rozwijany na bieżąco na branchu `master` — poprawki bezpieczeństwa trafiają tylko do najnowszej wersji, nie ma osobnych gałęzi LTS.
+This project is developed on an ongoing basis on the `master` branch — security fixes only land on the latest version; there are no separate LTS branches.
 
-## Zakres
+## Scope
 
-Ten projekt to aplikacja demonstracyjna/hobbystyczna. Obszary szczególnie wrażliwe na błędy bezpieczeństwa:
+This is a demo/hobby project. Areas particularly sensitive to security issues:
 
-- obsługa sesji i ciasteczek (`internal/server/session.go`),
-- hashowanie haseł (bcrypt, `internal/server/handlers_auth.go`),
-- izolacja danych między użytkownikami (zapytania SQL filtrowane po `user_id`).
+- session and cookie handling (`internal/server/session.go`),
+- password hashing (bcrypt, `internal/server/handlers_auth.go`),
+- per-user data isolation (SQL queries filtered by `user_id`).

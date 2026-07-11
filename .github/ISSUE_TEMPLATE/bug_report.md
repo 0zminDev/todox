@@ -1,28 +1,28 @@
 ---
-name: Zgłoszenie błędu
-about: Zgłoś coś, co nie działa jak powinno
+name: Bug report
+about: Report something that isn't working as expected
 title: "[BUG] "
 labels: bug
 ---
 
-**Opis błędu**
-Krótki, jasny opis tego, co jest nie tak.
+**Describe the bug**
+A clear, concise description of what's wrong.
 
-**Kroki do odtworzenia**
-1. Przejdź do '...'
-2. Kliknij '...'
-3. Zobacz błąd
+**Steps to reproduce**
+1. Go to '...'
+2. Click on '...'
+3. See error
 
-**Oczekiwane zachowanie**
-Co powinno się wydarzyć.
+**Expected behavior**
+What should happen.
 
-**Rzeczywiste zachowanie**
-Co się faktycznie dzieje (logi, zrzuty ekranu, jeśli pomocne).
+**Actual behavior**
+What actually happens (logs, screenshots if helpful).
 
-**Środowisko**
-- Wersja/commit:
-- System operacyjny:
-- Jak uruchamiasz appkę (go run / Docker / Fly.io):
+**Environment**
+- Version/commit:
+- OS:
+- How you're running the app (go run / Docker / Fly.io):
 
-**Dodatkowy kontekst**
-Cokolwiek jeszcze, co może pomóc.
+**Additional context**
+Anything else that might help.
