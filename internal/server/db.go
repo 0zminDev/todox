@@ -1,6 +1,9 @@
 package server
 
-import "strings"
+import (
+	"os"
+	"strings"
+)
 
 func migrate() error {
 	if _, err := db.Exec(`
@@ -9,7 +12,10 @@ func migrate() error {
 			email         TEXT UNIQUE NOT NULL,
 			name          TEXT NOT NULL,
 			password_hash TEXT NOT NULL,
-			created_at    INTEGER NOT NULL
+			created_at    INTEGER NOT NULL,
+			is_admin      INTEGER NOT NULL DEFAULT 0,
+			banned        INTEGER NOT NULL DEFAULT 0,
+			last_ip       TEXT NOT NULL DEFAULT ''
 		);
 		CREATE TABLE IF NOT EXISTS sessions (
 			token      TEXT PRIMARY KEY,
@@ -25,6 +31,12 @@ func migrate() error {
 			tag         TEXT NOT NULL DEFAULT '',
 			done        INTEGER NOT NULL DEFAULT 0
 		);
+		CREATE TABLE IF NOT EXISTS banned_ips (
+			ip         TEXT PRIMARY KEY,
+			reason     TEXT NOT NULL DEFAULT '',
+			banned_by  INTEGER REFERENCES users(id) ON DELETE SET NULL,
+			created_at INTEGER NOT NULL
+		);
 	`); err != nil {
 		return err
 	}
@@ -36,11 +48,51 @@ func migrate() error {
 		`ALTER TABLE todos ADD COLUMN description TEXT NOT NULL DEFAULT ''`,
 		`ALTER TABLE todos ADD COLUMN due_date TEXT NOT NULL DEFAULT ''`,
 		`ALTER TABLE todos ADD COLUMN tag TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE users ADD COLUMN banned INTEGER NOT NULL DEFAULT 0`,
+		`ALTER TABLE users ADD COLUMN last_ip TEXT NOT NULL DEFAULT ''`,
 	} {
 		if _, err := db.Exec(stmt); err != nil && !strings.Contains(err.Error(), "duplicate column") {
 			return err
 		}
 	}
 
+	return promoteAdmins()
+}
+
+// promoteAdmins grants admin access to every existing user whose email is
+// listed in the comma-separated ADMIN_EMAILS environment variable. Runs on
+// every startup, so promoting an already-registered user is just an env var
+// change plus a restart. New registrations are checked separately at signup
+// time via isAdminEmail, since this only runs once at startup.
+func promoteAdmins() error {
+	for _, email := range adminEmails() {
+		if _, err := db.Exec(`UPDATE users SET is_admin = 1 WHERE email = ?`, email); err != nil {
+			return err
+		}
+	}
 	return nil
+}
+
+func adminEmails() []string {
+	raw := os.Getenv("ADMIN_EMAILS")
+	if raw == "" {
+		return nil
+	}
+	var emails []string
+	for _, email := range strings.Split(raw, ",") {
+		if email = strings.TrimSpace(email); email != "" {
+			emails = append(emails, email)
+		}
+	}
+	return emails
+}
+
+func isAdminEmail(email string) bool {
+	for _, e := range adminEmails() {
+		if e == email {
+			return true
+		}
+	}
+	return false
 }

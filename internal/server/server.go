@@ -56,6 +56,11 @@ func Run(dbPath, port string) error {
 	mux.HandleFunc("POST /profile", requireAuth(handleProfileUpdate))
 	mux.HandleFunc("POST /profile/password", requireAuth(handlePasswordUpdate))
 
+	mux.HandleFunc("GET /admin", requireAdmin(handleAdminDashboard))
+	mux.HandleFunc("POST /admin/users/{id}/ban", requireAdmin(handleBanUser))
+	mux.HandleFunc("POST /admin/users/{id}/unban", requireAdmin(handleUnbanUser))
+	mux.HandleFunc("POST /admin/banned-ips/unban", requireAdmin(handleUnbanIP))
+
 	log.Println("listening on http://localhost:" + port)
-	return http.ListenAndServe(":"+port, mux)
+	return http.ListenAndServe(":"+port, banGuard(mux))
 }
