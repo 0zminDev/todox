@@ -1,4 +1,4 @@
-package main
+package server
 
 func migrate() error {
 	_, err := db.Exec(`

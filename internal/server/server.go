@@ -1,11 +1,12 @@
-package main
+// Package server implements the TodoX HTTP application: routing, session
+// authentication, and SQLite-backed persistence for users and todos.
+package server
 
 import (
 	"database/sql"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 
 	_ "modernc.org/sqlite"
 )
@@ -15,19 +16,19 @@ var (
 	tpl *template.Template
 )
 
-func main() {
-	dbPath := envOr("DB_PATH", "todos.db")
-	port := envOr("PORT", "8080")
-
+// Run opens the SQLite database at dbPath, applies migrations, and serves
+// the application on the given port until the process exits or ListenAndServe
+// returns an error.
+func Run(dbPath, port string) error {
 	var err error
 	db, err = sql.Open("sqlite", "file:"+dbPath+"?_pragma=busy_timeout(5000)&_pragma=foreign_keys(1)")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer db.Close()
 
 	if err := migrate(); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
@@ -53,12 +54,5 @@ func main() {
 	mux.HandleFunc("POST /profile/password", requireAuth(handlePasswordUpdate))
 
 	log.Println("listening on http://localhost:" + port)
-	log.Fatal(http.ListenAndServe(":"+port, mux))
-}
-
-func envOr(key, fallback string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return fallback
+	return http.ListenAndServe(":"+port, mux)
 }
