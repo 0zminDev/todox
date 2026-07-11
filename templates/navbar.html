@@ -3,6 +3,7 @@
 	<a class="brand" href="/app">TodoX</a>
 	<div class="nav-actions">
 		<span class="muted">{{.Name}}</span>
+		{{if .IsAdmin}}<a class="btn btn-ghost btn-sm" href="/admin">Admin</a>{{end}}
 		<a class="btn btn-ghost btn-sm" href="/profile">Profile</a>
 		<form method="post" action="/logout" class="inline-form">
 			<button type="submit" class="btn btn-ghost btn-sm">Log out</button>

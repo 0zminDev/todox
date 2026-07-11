@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin — TodoX</title>
+	<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+	{{template "navbar" .User}}
+
+	<main class="admin-container">
+		<h1>Admin dashboard</h1>
+
+		<section class="stat-grid">
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.TotalUsers}}</span>
+				<span class="stat-label">Users</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.NewUsersToday}}</span>
+				<span class="stat-label">New today</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.TotalTodos}}</span>
+				<span class="stat-label">Todos</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.DoneTodos}}</span>
+				<span class="stat-label">Done</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.PendingTodos}}</span>
+				<span class="stat-label">Pending</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.BannedUsers}}</span>
+				<span class="stat-label">Banned users</span>
+			</div>
+			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.BannedIPs}}</span>
+				<span class="stat-label">Banned IPs</span>
+			</div>
+		</section>
+
+		<section class="admin-section">
+			<h2>Users</h2>
+			<div class="table-scroll">
+				<table class="admin-table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Joined</th>
+							<th>Last IP</th>
+							<th>Todos</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{range .Users}}
+						<tr>
+							<td>{{.Name}}{{if .IsAdmin}} <span class="badge admin-badge">admin</span>{{end}}</td>
+							<td>{{.Email}}</td>
+							<td>{{.CreatedAt.Format "2006-01-02"}}</td>
+							<td>{{if .LastIP}}{{.LastIP}}{{else}}—{{end}}</td>
+							<td>{{.TodoCount}}</td>
+							<td>{{if .Banned}}<span class="badge banned-badge">banned</span>{{else}}<span class="badge active-badge">active</span>{{end}}</td>
+							<td>
+								{{if .Banned}}
+								<form method="post" action="/admin/users/{{.ID}}/unban" class="inline-form">
+									<button type="submit" class="btn btn-ghost btn-sm">Unban</button>
+								</form>
+								{{else if not .IsAdmin}}
+								<form method="post" action="/admin/users/{{.ID}}/ban" class="inline-form" onsubmit="return confirm('Ban {{.Email}}? This also blocks their last known IP address.')">
+									<button type="submit" class="btn btn-ghost btn-sm danger-text">Ban</button>
+								</form>
+								{{end}}
+							</td>
+						</tr>
+						{{else}}
+						<tr><td colspan="7" class="muted">No users yet.</td></tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="admin-section">
+			<h2>Banned IPs</h2>
+			<div class="table-scroll">
+				<table class="admin-table">
+					<thead>
+						<tr>
+							<th>IP</th>
+							<th>Reason</th>
+							<th>Banned on</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{range .BannedIPs}}
+						<tr>
+							<td>{{.IP}}</td>
+							<td>{{.Reason}}</td>
+							<td>{{.CreatedAt.Format "2006-01-02"}}</td>
+							<td>
+								<form method="post" action="/admin/banned-ips/unban" class="inline-form">
+									<input type="hidden" name="ip" value="{{.IP}}">
+									<button type="submit" class="btn btn-ghost btn-sm">Unban</button>
+								</form>
+							</td>
+						</tr>
+						{{else}}
+						<tr><td colspan="4" class="muted">No banned IPs.</td></tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
