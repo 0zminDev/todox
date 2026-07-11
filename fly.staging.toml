@@ -1,0 +1,27 @@
+# Staging environment — separate Fly app and volume from production (fly.toml).
+# Deployed on every push to the `staging` branch; see
+# .github/workflows/deploy-staging.yml.
+
+app = 'todox-app-staging'
+primary_region = 'ams'
+
+[build]
+[env]
+  DB_PATH = '/data/todos.db'
+  PORT = '8080'
+
+[[mounts]]
+  source = 'todox_data_staging'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = '256mb'
+  cpus = 1
+  memory_mb = 256
