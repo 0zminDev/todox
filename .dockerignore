@@ -1,0 +1,5 @@
+.git
+*.db
+todox-bin
+/tmp
+.claude
