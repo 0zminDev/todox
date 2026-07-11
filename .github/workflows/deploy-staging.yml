@@ -1,9 +1,9 @@
-name: Deploy
+name: Deploy Staging
 
 on:
   push:
     branches:
-      - master
+      - staging
 
 jobs:
   build:
@@ -22,10 +22,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    concurrency: deploy-group
+    concurrency: deploy-staging
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only --config fly.staging.toml
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_STAGING }}
