@@ -13,12 +13,23 @@
 	<main class="container">
 		<h1>Your todos</h1>
 
-		<form hx-post="/todos"
+		<form id="add-form"
+		      hx-post="/todos"
 		      hx-target="#todo-list"
 		      hx-swap="afterbegin"
-		      hx-on::after-request="if(event.detail.successful) this.reset()">
-			<input type="text" name="text" placeholder="What needs to be done?" autocomplete="off" required>
-			<button type="submit">Add</button>
+		      hx-on::after-request="if(event.detail.successful) { this.reset(); this.querySelector('details').open = false }">
+			<div class="add-form-main">
+				<input type="text" name="text" placeholder="What needs to be done?" autocomplete="off" required>
+				<button type="submit">Add</button>
+			</div>
+			<details class="add-form-advanced">
+				<summary>More options</summary>
+				<textarea name="description" placeholder="Description (optional)" rows="2"></textarea>
+				<div class="edit-form-row">
+					<input type="date" name="due_date">
+					<input type="text" name="tag" placeholder="Tag (optional)">
+				</div>
+			</details>
 		</form>
 
 		<ul id="todo-list">

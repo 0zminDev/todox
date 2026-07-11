@@ -124,13 +124,21 @@ h1 {
 
 .container form {
 	display: flex;
+	flex-direction: column;
 	gap: 0.5rem;
 	margin-bottom: 1.5rem;
 }
 
+.add-form-main {
+	display: flex;
+	gap: 0.5rem;
+}
+
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="date"],
+textarea {
 	flex: 1;
 	width: 100%;
 	padding: 0.75rem 1rem;
@@ -139,9 +147,14 @@ input[type="password"] {
 	background: var(--card);
 	color: var(--text);
 	font-size: 1rem;
+	font-family: inherit;
 }
 
-.container form button {
+textarea {
+	resize: vertical;
+}
+
+.container form > .add-form-main > button {
 	padding: 0.75rem 1.25rem;
 	background: var(--accent);
 	color: white;
@@ -149,6 +162,25 @@ input[type="password"] {
 	border: none;
 	border-radius: 10px;
 	cursor: pointer;
+	white-space: nowrap;
+}
+
+.add-form-advanced {
+	font-size: 0.9rem;
+}
+
+.add-form-advanced summary {
+	cursor: pointer;
+	color: var(--muted);
+	padding: 0.25rem 0;
+}
+
+.add-form-advanced[open] summary {
+	margin-bottom: 0.5rem;
+}
+
+.add-form-advanced textarea {
+	margin-bottom: 0.5rem;
 }
 
 ul {
@@ -162,12 +194,23 @@ ul {
 
 .todo-item {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
+	gap: 0.5rem;
 	background: var(--card);
 	border: 1px solid var(--border);
 	border-radius: 10px;
 	padding: 0.75rem 1rem;
+}
+
+.todo-item.overdue {
+	border-color: var(--danger);
+}
+
+.todo-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
 }
 
 .todo-item label {
@@ -176,31 +219,112 @@ ul {
 	gap: 0.75rem;
 	cursor: pointer;
 	flex: 1;
+	min-width: 0;
 }
 
 .todo-item input[type="checkbox"] {
+	flex-shrink: 0;
 	width: 1.15rem;
 	height: 1.15rem;
 	accent-color: var(--accent);
 }
 
-.todo-item.done span {
+.todo-text {
+	overflow-wrap: anywhere;
+}
+
+.todo-item.done .todo-text {
 	text-decoration: line-through;
 	color: var(--muted);
 }
 
-.delete-btn {
+.todo-actions {
+	display: flex;
+	gap: 0.25rem;
+	flex-shrink: 0;
+}
+
+.icon-btn {
 	background: transparent;
 	border: none;
-	color: var(--danger);
-	font-size: 1.25rem;
+	color: var(--muted);
+	font-size: 1.1rem;
 	line-height: 1;
 	padding: 0.25rem 0.5rem;
 	cursor: pointer;
+	border-radius: 6px;
+}
+
+.icon-btn:hover {
+	background: var(--border);
+}
+
+.delete-btn {
+	color: var(--danger);
+	font-size: 1.25rem;
 }
 
 .delete-btn:hover {
 	background: rgba(255, 59, 48, 0.1);
+}
+
+.todo-details {
+	padding-left: 1.9rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.todo-description {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.9rem;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.todo-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.2rem 0.6rem;
+	border-radius: 999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	background: var(--border);
+	color: var(--text);
+}
+
+.due-badge.overdue-badge {
+	background: rgba(255, 59, 48, 0.15);
+	color: var(--danger);
+}
+
+/* ---------- inline edit form ---------- */
+
+.todo-item-editing {
+	gap: 0.5rem;
+}
+
+.edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.edit-form-row {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.edit-form-actions {
+	display: flex;
+	gap: 0.5rem;
 }
 
 .empty {
