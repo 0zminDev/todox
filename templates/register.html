@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Załóż konto — TodoX</title>
+	<title>Sign up — TodoX</title>
 	<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 	<main class="auth-container">
 		<div class="auth-card">
 			<a class="brand" href="/">TodoX</a>
-			<h1>Załóż konto</h1>
+			<h1>Sign up</h1>
 
 			{{if .Error}}<p class="error-message">{{.Error}}</p>{{end}}
 
 			<form method="post" action="/register">
 				<label>
-					Imię
+					Name
 					<input type="text" name="name" value="{{.Name}}" required autofocus>
 				</label>
 				<label>
-					E-mail
+					Email
 					<input type="email" name="email" value="{{.Email}}" required>
 				</label>
 				<label>
-					Hasło
+					Password
 					<input type="password" name="password" required minlength="8">
 				</label>
 				<label>
-					Powtórz hasło
+					Confirm password
 					<input type="password" name="password2" required minlength="8">
 				</label>
-				<button type="submit" class="btn btn-primary btn-block">Załóż konto</button>
+				<button type="submit" class="btn btn-primary btn-block">Sign up</button>
 			</form>
 
-			<p class="auth-switch">Masz już konto? <a href="/login">Zaloguj się</a></p>
+			<p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
 		</div>
 	</main>
 </body>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Profil — TodoX</title>
+	<title>Profile — TodoX</title>
 	<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -11,44 +11,44 @@
 
 	<main class="auth-container">
 		<div class="auth-card">
-			<h1>Twój profil</h1>
+			<h1>Your profile</h1>
 
 			<div class="profile-field">
-				<span class="muted">E-mail</span>
+				<span class="muted">Email</span>
 				<span>{{.User.Email}}</span>
 			</div>
 
-			{{if .Saved}}<p class="success-message">Zapisano zmiany.</p>{{end}}
+			{{if .Saved}}<p class="success-message">Changes saved.</p>{{end}}
 			{{if .Error}}<p class="error-message">{{.Error}}</p>{{end}}
 
 			<form method="post" action="/profile">
 				<label>
-					Imię
+					Name
 					<input type="text" name="name" value="{{.User.Name}}" required>
 				</label>
-				<button type="submit" class="btn btn-primary btn-block">Zapisz</button>
+				<button type="submit" class="btn btn-primary btn-block">Save</button>
 			</form>
 
 			<hr>
 
-			<h2>Zmień hasło</h2>
-			{{if .PasswordSaved}}<p class="success-message">Hasło zostało zmienione.</p>{{end}}
+			<h2>Change password</h2>
+			{{if .PasswordSaved}}<p class="success-message">Password changed successfully.</p>{{end}}
 			{{if .PasswordError}}<p class="error-message">{{.PasswordError}}</p>{{end}}
 
 			<form method="post" action="/profile/password">
 				<label>
-					Aktualne hasło
+					Current password
 					<input type="password" name="current_password" required>
 				</label>
 				<label>
-					Nowe hasło
+					New password
 					<input type="password" name="new_password" required minlength="8">
 				</label>
 				<label>
-					Powtórz nowe hasło
+					Confirm new password
 					<input type="password" name="new_password2" required minlength="8">
 				</label>
-				<button type="submit" class="btn btn-primary btn-block">Zmień hasło</button>
+				<button type="submit" class="btn btn-primary btn-block">Change password</button>
 			</form>
 		</div>
 	</main>

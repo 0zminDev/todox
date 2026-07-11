@@ -12,11 +12,11 @@
 	        hx-delete="/todos/{{.ID}}"
 	        hx-target="#todo-{{.ID}}"
 	        hx-swap="outerHTML"
-	        hx-confirm="Usunąć to zadanie?">
+	        hx-confirm="Delete this task?">
 		&times;
 	</button>
 </li>
 {{end}}
 {{define "todo-item.html"}}{{template "todo-li" .}}{{end}}
 {{define "todo-item-new.html"}}<li id="empty-state" hx-swap-oob="delete"></li>{{template "todo-li" .}}{{end}}
-{{define "empty-state.html"}}<li id="empty-state" class="empty">Brak zadań. Dodaj coś powyżej.</li>{{end}}
+{{define "empty-state.html"}}<li id="empty-state" class="empty">No tasks yet. Add one above.</li>{{end}}

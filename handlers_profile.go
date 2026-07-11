@@ -16,7 +16,7 @@ func handleProfileUpdate(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{"User": u}
 
 	if name == "" {
-		data["Error"] = "Nazwa nie może być pusta."
+		data["Error"] = "Name can't be empty."
 		render(w, "profile.html", data)
 		return
 	}
@@ -42,17 +42,17 @@ func handlePasswordUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if bcrypt.CompareHashAndPassword([]byte(hash), []byte(current)) != nil {
-		data["PasswordError"] = "Aktualne hasło jest nieprawidłowe."
+		data["PasswordError"] = "Current password is incorrect."
 		render(w, "profile.html", data)
 		return
 	}
 	if len(newPass) < 8 {
-		data["PasswordError"] = "Nowe hasło musi mieć co najmniej 8 znaków."
+		data["PasswordError"] = "New password must be at least 8 characters long."
 		render(w, "profile.html", data)
 		return
 	}
 	if newPass != newPass2 {
-		data["PasswordError"] = "Nowe hasła nie są takie same."
+		data["PasswordError"] = "New passwords don't match."
 		render(w, "profile.html", data)
 		return
 	}
