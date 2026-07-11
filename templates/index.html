@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TodoX</title>
+	<link rel="stylesheet" href="/static/style.css">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+	<main class="container">
+		<h1>TodoX</h1>
+
+		<form hx-post="/todos"
+		      hx-target="#todo-list"
+		      hx-swap="afterbegin"
+		      hx-on::after-request="if(event.detail.successful) this.reset()">
+			<input type="text" name="text" placeholder="Co trzeba zrobić?" autocomplete="off" required>
+			<button type="submit">Dodaj</button>
+		</form>
+
+		<ul id="todo-list">
+			{{range .}}
+				{{template "todo-item.html" .}}
+			{{else}}
+				<li id="empty-state" class="empty">Brak zadań. Dodaj coś powyżej.</li>
+			{{end}}
+		</ul>
+	</main>
+</body>
+</html>
