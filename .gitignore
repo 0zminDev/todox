@@ -1,0 +1,6 @@
+*.db
+*.db-journal
+/todox-bin
+/tmp
+.DS_Store
+.claude/
