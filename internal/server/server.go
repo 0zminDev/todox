@@ -46,15 +46,19 @@ func Run(dbPath, port string) error {
 
 	mux.HandleFunc("GET /app", requireAuth(handleApp))
 
+	mux.HandleFunc("POST /boards", requireAuth(handleBoardCreate))
+	mux.HandleFunc("GET /boards/{id}", requireAuth(handleBoardView))
+	mux.HandleFunc("GET /boards/{id}/edit", requireAuth(handleBoardEditForm))
+	mux.HandleFunc("PUT /boards/{id}", requireAuth(handleBoardUpdate))
+	mux.HandleFunc("POST /boards/{id}/delete", requireAuth(handleBoardDelete))
+
 	mux.HandleFunc("POST /lists", requireAuth(handleListCreate))
-	mux.HandleFunc("GET /lists/{id}", requireAuth(handleListView))
 	mux.HandleFunc("GET /lists/{id}/edit", requireAuth(handleListEditForm))
 	mux.HandleFunc("PUT /lists/{id}", requireAuth(handleListUpdate))
 	mux.HandleFunc("DELETE /lists/{id}", requireAuth(handleListDelete))
 	mux.HandleFunc("POST /lists/{id}/move", requireAuth(handleListMove))
 
 	mux.HandleFunc("POST /todos", requireAuth(handleCreate))
-	mux.HandleFunc("GET /todos/{id}", requireAuth(handleTodoView))
 	mux.HandleFunc("PUT /todos/{id}", requireAuth(handleUpdate))
 	mux.HandleFunc("DELETE /todos/{id}", requireAuth(handleDelete))
 	mux.HandleFunc("GET /todos/{id}/edit", requireAuth(handleTodoEditForm))

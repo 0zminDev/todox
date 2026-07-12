@@ -1,0 +1,38 @@
+{{define "board-tile"}}
+<div id="board-tile-{{.ID}}" class="board-tile">
+	<div class="board-tile-header">
+		<a class="board-tile-name" href="/boards/{{.ID}}">{{.Name}}</a>
+		<div class="board-tile-actions">
+			<button class="icon-btn"
+			        hx-get="/boards/{{.ID}}/edit"
+			        hx-target="#modal-body"
+			        hx-swap="innerHTML"
+			        aria-label="Rename board">
+				✎
+			</button>
+			<form method="post" action="/boards/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Delete board &quot;{{.Name}}&quot; and its {{.ListCount}} list(s)? This can\'t be undone.')">
+				<button type="submit" class="icon-btn delete-btn" aria-label="Delete board">&times;</button>
+			</form>
+		</div>
+	</div>
+	<p class="muted board-tile-meta">{{.ListCount}} list{{if ne .ListCount 1}}s{{end}}</p>
+</div>
+{{end}}
+
+{{define "board-tile-edit.html"}}
+<form hx-put="/boards/{{.ID}}"
+      hx-target="#board-tile-{{.ID}}"
+      hx-swap="outerHTML"
+      class="edit-form"
+      hx-on::after-request="if(event.detail.successful) document.getElementById('modal').close()">
+	<input type="text" name="name" value="{{.Name}}" required autofocus>
+	<div class="edit-form-actions">
+		<button type="submit" class="btn btn-primary btn-sm">Save</button>
+		<button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('modal').close()">Cancel</button>
+	</div>
+</form>
+{{end}}
+
+{{define "board-tile.html"}}{{template "board-tile" .}}{{end}}
+{{define "board-tile-new.html"}}<div id="boards-empty-state" hx-swap-oob="delete"></div>{{template "board-tile" .}}{{end}}
+{{define "boards-empty-state.html"}}<div id="boards-empty-state" class="empty">No boards yet. Add one above.</div>{{end}}

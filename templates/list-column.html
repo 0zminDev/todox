@@ -6,8 +6,8 @@
 		<div class="list-actions">
 			<button class="icon-btn"
 			        hx-get="/lists/{{.ID}}/edit"
-			        hx-target="#list-{{.ID}}"
-			        hx-swap="outerHTML"
+			        hx-target="#modal-body"
+			        hx-swap="innerHTML"
 			        aria-label="Rename list">
 				✎
 			</button>
@@ -35,6 +35,7 @@
 	      hx-target="#list-{{.ID}}-items"
 	      hx-swap="beforeend"
 	      hx-on::after-request="if(event.detail.successful) this.reset()">
+		<input type="hidden" name="board_id" value="{{.BoardID}}">
 		<input type="hidden" name="list_id" value="{{.ID}}">
 		<input type="text" name="text" placeholder="+ Add a card" autocomplete="off" required>
 	</form>
@@ -42,21 +43,17 @@
 {{end}}
 
 {{define "list-column-edit.html"}}
-<div id="list-{{.ID}}" class="list-column">
-	<form hx-put="/lists/{{.ID}}" hx-target="#list-{{.ID}}" hx-swap="outerHTML" class="list-rename-form">
-		<input type="text" name="name" value="{{.Name}}" required autofocus>
-		<div class="edit-form-actions">
-			<button type="submit" class="btn btn-primary btn-sm">Save</button>
-			<button type="button"
-			        class="btn btn-ghost btn-sm"
-			        hx-get="/lists/{{.ID}}"
-			        hx-target="#list-{{.ID}}"
-			        hx-swap="outerHTML">
-				Cancel
-			</button>
-		</div>
-	</form>
-</div>
+<form hx-put="/lists/{{.ID}}"
+      hx-target="#list-{{.ID}}"
+      hx-swap="outerHTML"
+      class="edit-form"
+      hx-on::after-request="if(event.detail.successful) document.getElementById('modal').close()">
+	<input type="text" name="name" value="{{.Name}}" required autofocus>
+	<div class="edit-form-actions">
+		<button type="submit" class="btn btn-primary btn-sm">Save</button>
+		<button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('modal').close()">Cancel</button>
+	</div>
+</form>
 {{end}}
 
 {{define "list-column.html"}}{{template "list-column" .}}{{end}}

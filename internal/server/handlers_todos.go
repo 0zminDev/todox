@@ -44,24 +44,27 @@ func fetchTodo(userID, id int64) (Todo, error) {
 	return t, nil
 }
 
-// resolveOwnedListID validates that raw is a list id owned by userID,
-// falling back to (creating, if necessary) their default list when raw is
-// missing, malformed, or points at a list that isn't theirs — e.g. a stale
-// browser tab whose add-form still has an old/foreign list_id cached.
-func resolveOwnedListID(userID int64, raw string) (int64, error) {
+// resolveOwnedListID validates that raw is a list id owned by userID within
+// boardID, falling back to (creating, if necessary) that board's default
+// list when raw is missing, malformed, or points at a list from a different
+// board — e.g. a stale browser tab whose add-form still has an old list_id
+// cached. This fallback only ever lands inside the board the caller already
+// validated (see handleCreate) — it must never guess a *different* board,
+// that's handled as a loud failure one layer up.
+func resolveOwnedListID(userID, boardID int64, raw string) (int64, error) {
 	if raw != "" {
 		if id, err := strconv.ParseInt(raw, 10, 64); err == nil {
 			var owns int
-			if err := db.QueryRow(`SELECT 1 FROM lists WHERE id = ? AND user_id = ?`, id, userID).Scan(&owns); err == nil {
+			if err := db.QueryRow(`SELECT 1 FROM lists WHERE id = ? AND board_id = ? AND user_id = ?`, id, boardID, userID).Scan(&owns); err == nil {
 				return id, nil
 			}
 		}
 	}
-	if err := ensureDefaultList(userID); err != nil {
+	if err := ensureDefaultList(userID, boardID); err != nil {
 		return 0, err
 	}
 	var id int64
-	if err := db.QueryRow(`SELECT id FROM lists WHERE user_id = ? ORDER BY position ASC LIMIT 1`, userID).Scan(&id); err != nil {
+	if err := db.QueryRow(`SELECT id FROM lists WHERE board_id = ? ORDER BY position ASC LIMIT 1`, boardID).Scan(&id); err != nil {
 		return 0, err
 	}
 	return id, nil
@@ -78,7 +81,15 @@ func handleCreate(w http.ResponseWriter, r *http.Request) {
 	dueDate := strings.TrimSpace(r.FormValue("due_date"))
 	tag := strings.TrimSpace(r.FormValue("tag"))
 
-	listID, err := resolveOwnedListID(u.ID, r.FormValue("list_id"))
+	boardID, err := strconv.ParseInt(r.FormValue("board_id"), 10, 64)
+	if err != nil || !isOwnedBoard(u.ID, boardID) {
+		// Unlike the list_id fallback below, a bad board_id must not
+		// silently land the card somewhere else — bounce home instead.
+		w.Header().Set("HX-Redirect", "/app")
+		return
+	}
+
+	listID, err := resolveOwnedListID(u.ID, boardID, r.FormValue("list_id"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -102,24 +113,6 @@ func handleCreate(w http.ResponseWriter, r *http.Request) {
 	t := Todo{ID: id, ListID: listID, Position: pos, Text: text, Description: description, DueDate: dueDate, Tag: tag, Done: false}
 	t.Overdue = isOverdue(t.DueDate, t.Done)
 	if err := tpl.ExecuteTemplate(w, "todo-item-new.html", t); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func handleTodoView(w http.ResponseWriter, r *http.Request) {
-	u := currentUser(r)
-	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
-	if err != nil {
-		http.Error(w, "invalid id", http.StatusBadRequest)
-		return
-	}
-
-	t, err := fetchTodo(u.ID, id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	if err := tpl.ExecuteTemplate(w, "todo-item.html", t); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

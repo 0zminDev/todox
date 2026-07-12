@@ -13,8 +13,8 @@
 		<div class="todo-actions">
 			<button class="icon-btn"
 			        hx-get="/todos/{{.ID}}/edit"
-			        hx-target="#todo-{{.ID}}"
-			        hx-swap="outerHTML"
+			        hx-target="#modal-body"
+			        hx-swap="innerHTML"
 			        aria-label="Edit">
 				✎
 			</button>
@@ -43,26 +43,22 @@
 {{end}}
 
 {{define "todo-item-edit.html"}}
-<li id="todo-{{.ID}}" class="todo-item todo-item-editing">
-	<form hx-put="/todos/{{.ID}}" hx-target="#todo-{{.ID}}" hx-swap="outerHTML" class="edit-form">
-		<input type="text" name="text" value="{{.Text}}" placeholder="Task title" required autofocus>
-		<textarea name="description" placeholder="Description (optional)" rows="2">{{.Description}}</textarea>
-		<div class="edit-form-row">
-			<input type="date" name="due_date" value="{{.DueDate}}">
-			<input type="text" name="tag" value="{{.Tag}}" placeholder="Tag (optional)">
-		</div>
-		<div class="edit-form-actions">
-			<button type="submit" class="btn btn-primary btn-sm">Save</button>
-			<button type="button"
-			        class="btn btn-ghost btn-sm"
-			        hx-get="/todos/{{.ID}}"
-			        hx-target="#todo-{{.ID}}"
-			        hx-swap="outerHTML">
-				Cancel
-			</button>
-		</div>
-	</form>
-</li>
+<form hx-put="/todos/{{.ID}}"
+      hx-target="#todo-{{.ID}}"
+      hx-swap="outerHTML"
+      class="edit-form"
+      hx-on::after-request="if(event.detail.successful) document.getElementById('modal').close()">
+	<input type="text" name="text" value="{{.Text}}" placeholder="Task title" required autofocus>
+	<textarea name="description" placeholder="Description (optional)" rows="2">{{.Description}}</textarea>
+	<div class="edit-form-row">
+		<input type="date" name="due_date" value="{{.DueDate}}">
+		<input type="text" name="tag" value="{{.Tag}}" placeholder="Tag (optional)">
+	</div>
+	<div class="edit-form-actions">
+		<button type="submit" class="btn btn-primary btn-sm">Save</button>
+		<button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('modal').close()">Cancel</button>
+	</div>
+</form>
 {{end}}
 
 {{define "todo-item.html"}}{{template "todo-li" .}}{{end}}
