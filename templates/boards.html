@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Your boards — TodoX</title>
+	<link rel="stylesheet" href="/static/style.css">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+	{{template "navbar" .User}}
+
+	<main class="boards-page">
+		<h1>Your boards</h1>
+
+		<div id="boards-grid" class="boards-grid">
+			{{range .Boards}}
+				{{template "board-tile.html" .}}
+			{{else}}
+				{{template "boards-empty-state.html"}}
+			{{end}}
+		</div>
+
+		<form id="add-board-form"
+		      hx-post="/boards"
+		      hx-target="#boards-grid"
+		      hx-swap="beforeend"
+		      hx-on::after-request="if(event.detail.successful) this.reset()">
+			<input type="text" name="name" placeholder="+ Add a board" autocomplete="off" required>
+			<button type="submit" class="btn btn-primary">Add board</button>
+		</form>
+	</main>
+
+	{{template "modal-shell"}}
+	<script src="/static/modal.js"></script>
+</body>
+</html>

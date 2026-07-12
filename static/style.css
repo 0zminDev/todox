@@ -571,6 +571,19 @@ ul {
 	overflow-x: hidden;
 }
 
+.board-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.board-header h1 {
+	margin: 0;
+	text-align: left;
+	font-size: 1.4rem;
+}
+
 .board {
 	display: flex;
 	align-items: flex-start;
@@ -619,8 +632,7 @@ ul {
 }
 
 .add-card-form,
-.add-list-form,
-.list-rename-form {
+.add-list-form {
 	flex-shrink: 0;
 }
 
@@ -646,4 +658,92 @@ ul {
 
 .sortable-drag {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- boards home ---------- */
+
+.boards-page {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem 4rem;
+}
+
+.boards-page h1 {
+	text-align: left;
+	margin-bottom: 1.5rem;
+}
+
+.boards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.board-tile {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 1rem;
+}
+
+.board-tile-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.board-tile-name {
+	flex: 1;
+	min-width: 0;
+	font-weight: 700;
+	overflow-wrap: anywhere;
+}
+
+.board-tile-actions {
+	display: flex;
+	gap: 0.25rem;
+	flex-shrink: 0;
+}
+
+.board-tile-meta {
+	margin: 0;
+	font-size: 0.85rem;
+}
+
+#boards-empty-state {
+	color: var(--muted);
+	padding: 1rem 0;
+}
+
+#add-board-form {
+	display: flex;
+	gap: 0.5rem;
+}
+
+#add-board-form input {
+	flex: 1;
+}
+
+/* ---------- modal ---------- */
+
+.modal {
+	border: none;
+	border-radius: 14px;
+	padding: 1.5rem;
+	width: 90vw;
+	max-width: 420px;
+	background: var(--card);
+	color: var(--text);
+}
+
+.modal::backdrop {
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.modal .edit-form {
+	gap: 0.75rem;
 }
