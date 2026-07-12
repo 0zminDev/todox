@@ -48,10 +48,27 @@ type Stats struct {
 
 type Todo struct {
 	ID          int64
+	ListID      int64
+	Position    float64
 	Text        string
 	Description string
 	DueDate     string // YYYY-MM-DD, empty if unset
 	Tag         string
 	Done        bool
 	Overdue     bool // computed: DueDate is in the past and Done is false
+}
+
+type List struct {
+	ID       int64
+	BoardID  int64
+	Name     string
+	Position float64
+	Todos    []Todo
+}
+
+type Board struct {
+	ID        int64
+	Name      string
+	Position  float64
+	ListCount int // for the boards-home tile grid
 }

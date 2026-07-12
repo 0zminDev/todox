@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{.Board.Name}} — TodoX</title>
+	<link rel="stylesheet" href="/static/style.css">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+	{{template "navbar" .User}}
+
+	<main class="board-page">
+		<div class="board-header">
+			<a class="btn btn-ghost btn-sm" href="/app">← Boards</a>
+			<h1>{{.Board.Name}}</h1>
+		</div>
+
+		<div id="lists-board" class="board">
+			{{range .Lists}}
+				{{template "list-column.html" .}}
+			{{else}}
+				{{template "board-empty-state.html"}}
+			{{end}}
+			<form id="add-list-form"
+			      class="add-list-form"
+			      hx-post="/lists"
+			      hx-target="#add-list-form"
+			      hx-swap="beforebegin"
+			      hx-on::after-request="if(event.detail.successful) this.reset()">
+				<input type="hidden" name="board_id" value="{{.Board.ID}}">
+				<input type="text" name="name" placeholder="+ Add a list" autocomplete="off" required>
+			</form>
+		</div>
+	</main>
+
+	{{template "modal-shell"}}
+
+	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+	<script src="/static/board.js"></script>
+	<script src="/static/modal.js"></script>
+</body>
+</html>

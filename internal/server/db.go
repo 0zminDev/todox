@@ -38,6 +38,20 @@ func migrate() error {
 			banned_by  INTEGER REFERENCES users(id) ON DELETE SET NULL,
 			created_at INTEGER NOT NULL
 		);
+		CREATE TABLE IF NOT EXISTS lists (
+			id         INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+			name       TEXT NOT NULL,
+			position   REAL NOT NULL,
+			created_at INTEGER NOT NULL
+		);
+		CREATE TABLE IF NOT EXISTS boards (
+			id         INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+			name       TEXT NOT NULL,
+			position   REAL NOT NULL,
+			created_at INTEGER NOT NULL
+		);
 	`); err != nil {
 		return err
 	}
@@ -53,8 +67,22 @@ func migrate() error {
 		`ALTER TABLE users ADD COLUMN banned INTEGER NOT NULL DEFAULT 0`,
 		`ALTER TABLE users ADD COLUMN last_ip TEXT NOT NULL DEFAULT ''`,
 		`ALTER TABLE users ADD COLUMN deleted_at INTEGER`,
+		`ALTER TABLE todos ADD COLUMN list_id INTEGER REFERENCES lists(id) ON DELETE CASCADE`,
+		`ALTER TABLE todos ADD COLUMN position REAL NOT NULL DEFAULT 0`,
+		`ALTER TABLE lists ADD COLUMN board_id INTEGER REFERENCES boards(id) ON DELETE CASCADE`,
 	} {
 		if _, err := db.Exec(stmt); err != nil && !strings.Contains(err.Error(), "duplicate column") {
+			return err
+		}
+	}
+
+	// These columns are added above via ALTER, so the indexes on them can't
+	// live in the CREATE TABLE block for fresh databases.
+	for _, stmt := range []string{
+		`CREATE INDEX IF NOT EXISTS idx_todos_list_position ON todos(list_id, position)`,
+		`CREATE INDEX IF NOT EXISTS idx_lists_board_position ON lists(board_id, position)`,
+	} {
+		if _, err := db.Exec(stmt); err != nil {
 			return err
 		}
 	}

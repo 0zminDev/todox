@@ -40,6 +40,12 @@ func anonymizeUser(userID int64) error {
 	if _, err := tx.Exec(`DELETE FROM todos WHERE user_id = ?`, userID); err != nil {
 		return err
 	}
+	if _, err := tx.Exec(`DELETE FROM lists WHERE user_id = ?`, userID); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(`DELETE FROM boards WHERE user_id = ?`, userID); err != nil {
+		return err
+	}
 
 	return tx.Commit()
 }
