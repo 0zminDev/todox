@@ -59,18 +59,18 @@ func userFromRequest(r *http.Request) (*User, error) {
 	var u User
 	var expiresAt int64
 	row := db.QueryRow(`
-		SELECT u.id, u.email, u.name, u.is_admin, u.banned, s.expires_at
+		SELECT u.id, u.email, u.name, u.is_admin, u.banned, (u.deleted_at IS NOT NULL), s.expires_at
 		FROM sessions s JOIN users u ON u.id = s.user_id
 		WHERE s.token = ?`, cookie.Value)
-	if err := row.Scan(&u.ID, &u.Email, &u.Name, &u.IsAdmin, &u.Banned, &expiresAt); err != nil {
+	if err := row.Scan(&u.ID, &u.Email, &u.Name, &u.IsAdmin, &u.Banned, &u.Deleted, &expiresAt); err != nil {
 		return nil, err
 	}
 	if time.Now().Unix() > expiresAt {
 		return nil, errors.New("session expired")
 	}
-	if u.Banned {
+	if u.Banned || u.Deleted {
 		db.Exec(`DELETE FROM sessions WHERE token = ?`, cookie.Value)
-		return nil, errors.New("account banned")
+		return nil, errors.New("account unavailable")
 	}
 	return &u, nil
 }

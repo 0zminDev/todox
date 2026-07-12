@@ -15,7 +15,8 @@ func migrate() error {
 			created_at    INTEGER NOT NULL,
 			is_admin      INTEGER NOT NULL DEFAULT 0,
 			banned        INTEGER NOT NULL DEFAULT 0,
-			last_ip       TEXT NOT NULL DEFAULT ''
+			last_ip       TEXT NOT NULL DEFAULT '',
+			deleted_at    INTEGER
 		);
 		CREATE TABLE IF NOT EXISTS sessions (
 			token      TEXT PRIMARY KEY,
@@ -59,6 +60,7 @@ func migrate() error {
 		`ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0`,
 		`ALTER TABLE users ADD COLUMN banned INTEGER NOT NULL DEFAULT 0`,
 		`ALTER TABLE users ADD COLUMN last_ip TEXT NOT NULL DEFAULT ''`,
+		`ALTER TABLE users ADD COLUMN deleted_at INTEGER`,
 		`ALTER TABLE todos ADD COLUMN list_id INTEGER REFERENCES lists(id) ON DELETE CASCADE`,
 		`ALTER TABLE todos ADD COLUMN position REAL NOT NULL DEFAULT 0`,
 	} {
