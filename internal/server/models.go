@@ -57,7 +57,15 @@ type Todo struct {
 
 type List struct {
 	ID       int64
+	BoardID  int64
 	Name     string
 	Position float64
 	Todos    []Todo
+}
+
+type Board struct {
+	ID        int64
+	Name      string
+	Position  float64
+	ListCount int // for the boards-home tile grid
 }
