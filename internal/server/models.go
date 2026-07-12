@@ -12,6 +12,7 @@ type User struct {
 	Name    string
 	IsAdmin bool
 	Banned  bool
+	Deleted bool
 }
 
 // AdminUserRow is a row in the admin user listing — a wider view of a user
@@ -24,6 +25,7 @@ type AdminUserRow struct {
 	LastIP    string
 	IsAdmin   bool
 	Banned    bool
+	Deleted   bool
 	TodoCount int
 }
 
@@ -37,6 +39,7 @@ type Stats struct {
 	TotalUsers    int
 	NewUsersToday int
 	BannedUsers   int
+	DeletedUsers  int
 	BannedIPs     int
 	TotalTodos    int
 	DoneTodos     int

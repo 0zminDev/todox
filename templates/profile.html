@@ -50,6 +50,20 @@
 				</label>
 				<button type="submit" class="btn btn-primary btn-block">Change password</button>
 			</form>
+
+			<hr>
+
+			<h2>Danger zone</h2>
+			<p class="muted">Deleting your account removes your tasks and anonymizes your profile. This can't be undone.</p>
+			{{if .DeleteError}}<p class="error-message">{{.DeleteError}}</p>{{end}}
+
+			<form method="post" action="/profile/delete" onsubmit="return confirm('Delete your account? This can\'t be undone.')">
+				<label>
+					Confirm your password
+					<input type="password" name="password" required>
+				</label>
+				<button type="submit" class="btn btn-ghost btn-block danger-text">Delete my account</button>
+			</form>
 		</div>
 	</main>
 </body>
