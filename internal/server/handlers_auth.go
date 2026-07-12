@@ -12,7 +12,9 @@ func handleLanding(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/app", http.StatusSeeOther)
 		return
 	}
-	render(w, "landing.html", nil)
+	render(w, "landing.html", map[string]any{
+		"AccountDeleted": r.URL.Query().Get("account_deleted") == "1",
+	})
 }
 
 func handleRegisterForm(w http.ResponseWriter, r *http.Request) {

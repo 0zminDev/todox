@@ -583,6 +583,11 @@ ul {
 	color: var(--success);
 }
 
+.deleted-badge {
+	background: var(--border);
+	color: var(--muted);
+}
+
 .danger-text {
 	color: var(--danger);
 }

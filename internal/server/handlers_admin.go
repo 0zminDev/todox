@@ -14,6 +14,9 @@ func fetchStats() (Stats, error) {
 	if err := db.QueryRow(`SELECT COUNT(*) FROM users WHERE banned = 1`).Scan(&s.BannedUsers); err != nil {
 		return s, err
 	}
+	if err := db.QueryRow(`SELECT COUNT(*) FROM users WHERE deleted_at IS NOT NULL`).Scan(&s.DeletedUsers); err != nil {
+		return s, err
+	}
 	if err := db.QueryRow(`SELECT COUNT(*) FROM users WHERE date(created_at, 'unixepoch') = date('now')`).Scan(&s.NewUsersToday); err != nil {
 		return s, err
 	}
@@ -33,7 +36,7 @@ func fetchStats() (Stats, error) {
 func fetchAllUsers() ([]AdminUserRow, error) {
 	rows, err := db.Query(`
 		SELECT u.id, u.email, u.name, u.created_at, u.last_ip, u.is_admin, u.banned,
-		       COUNT(t.id) AS todo_count
+		       (u.deleted_at IS NOT NULL), COUNT(t.id) AS todo_count
 		FROM users u
 		LEFT JOIN todos t ON t.user_id = u.id
 		GROUP BY u.id
@@ -47,7 +50,7 @@ func fetchAllUsers() ([]AdminUserRow, error) {
 	for rows.Next() {
 		var u AdminUserRow
 		var createdAt int64
-		if err := rows.Scan(&u.ID, &u.Email, &u.Name, &createdAt, &u.LastIP, &u.IsAdmin, &u.Banned, &u.TodoCount); err != nil {
+		if err := rows.Scan(&u.ID, &u.Email, &u.Name, &createdAt, &u.LastIP, &u.IsAdmin, &u.Banned, &u.Deleted, &u.TodoCount); err != nil {
 			return nil, err
 		}
 		u.CreatedAt = time.Unix(createdAt, 0)
@@ -150,6 +153,26 @@ func handleUnbanUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+}
+
+func handleAdminDeleteUser(w http.ResponseWriter, r *http.Request) {
+	admin := currentUser(r)
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if id == admin.ID {
+		http.Error(w, "Use your profile page to delete your own account.", http.StatusBadRequest)
+		return
+	}
+
+	if err := anonymizeUser(id); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
 }
 

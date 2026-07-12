@@ -38,6 +38,10 @@
 				<span class="stat-label">Banned users</span>
 			</div>
 			<div class="stat-tile">
+				<span class="stat-value">{{.Stats.DeletedUsers}}</span>
+				<span class="stat-label">Deleted users</span>
+			</div>
+			<div class="stat-tile">
 				<span class="stat-value">{{.Stats.BannedIPs}}</span>
 				<span class="stat-label">Banned IPs</span>
 			</div>
@@ -66,15 +70,25 @@
 							<td>{{.CreatedAt.Format "2006-01-02"}}</td>
 							<td>{{if .LastIP}}{{.LastIP}}{{else}}—{{end}}</td>
 							<td>{{.TodoCount}}</td>
-							<td>{{if .Banned}}<span class="badge banned-badge">banned</span>{{else}}<span class="badge active-badge">active</span>{{end}}</td>
 							<td>
-								{{if .Banned}}
+								{{if .Deleted}}<span class="badge deleted-badge">deleted</span>
+								{{else if .Banned}}<span class="badge banned-badge">banned</span>
+								{{else}}<span class="badge active-badge">active</span>{{end}}
+							</td>
+							<td>
+								{{if .Deleted}}
+								{{else if .Banned}}
 								<form method="post" action="/admin/users/{{.ID}}/unban" class="inline-form">
 									<button type="submit" class="btn btn-ghost btn-sm">Unban</button>
 								</form>
 								{{else if not .IsAdmin}}
 								<form method="post" action="/admin/users/{{.ID}}/ban" class="inline-form" onsubmit="return confirm('Ban {{.Email}}? This also blocks their last known IP address.')">
 									<button type="submit" class="btn btn-ghost btn-sm danger-text">Ban</button>
+								</form>
+								{{end}}
+								{{if and (not .Deleted) (ne .ID $.User.ID)}}
+								<form method="post" action="/admin/users/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Delete and anonymize {{.Email}}? This can\'t be undone.')">
+									<button type="submit" class="btn btn-ghost btn-sm danger-text">Delete</button>
 								</form>
 								{{end}}
 							</td>

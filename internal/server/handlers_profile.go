@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -68,4 +69,41 @@ func handlePasswordUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	data["PasswordSaved"] = true
 	render(w, "profile.html", data)
+}
+
+// handleAccountDelete lets a user anonymize (not hard-delete) their own
+// account after re-confirming their password, mirroring the confirmation
+// already required for a password change.
+func handleAccountDelete(w http.ResponseWriter, r *http.Request) {
+	u := currentUser(r)
+	password := r.FormValue("password")
+
+	var hash string
+	if err := db.QueryRow(`SELECT password_hash FROM users WHERE id = ?`, u.ID).Scan(&hash); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {
+		render(w, "profile.html", map[string]any{
+			"User":        u,
+			"DeleteError": "Incorrect password.",
+		})
+		return
+	}
+
+	if err := anonymizeUser(u.ID); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     sessionCookieName,
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		Secure:   isHTTPS(r),
+		SameSite: http.SameSiteLaxMode,
+	})
+	http.Redirect(w, r, "/?account_deleted=1", http.StatusSeeOther)
 }

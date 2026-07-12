@@ -8,6 +8,7 @@
 </head>
 <body>
 	<main class="landing">
+		{{if .AccountDeleted}}<p class="success-message">Your account has been deleted.</p>{{end}}
 		<nav class="landing-nav">
 			<span class="brand">TodoX</span>
 			<div class="nav-actions">
